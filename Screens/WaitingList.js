@@ -1,11 +1,19 @@
 import react from "react";
 import { StyleSheet, View, Text, Button } from 'react-native';
+import { database } from "../Firebase/firebase";
 
 const WaitingList = ({ navigation }) => {
 
     const loginNavigate = () => {
         navigation.popToTop();
     }
+
+    database()
+        .ref('/users/0')
+        .once('value')
+        .then(snapshot => {
+            console.log('User data: ', snapshot.val());
+        });
 
     return (
         <View style={styles.container}>

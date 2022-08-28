@@ -4,6 +4,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, onValue, set } from 'firebase/database';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,5 +25,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
+const db = getDatabase();
+// ref() - gets a reference to the database data, 
+// onValue() - returns a snapshot of the data when updated at all in real-time, 
+    // accessed as (snapshot) => snapshot.val()
+// set() - writes to the database
 
-export { app, analytics, auth, signInWithEmailAndPassword };
+export { app, analytics, auth, 
+    db, ref, onValue, signInWithEmailAndPassword };

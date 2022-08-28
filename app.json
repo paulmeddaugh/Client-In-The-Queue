@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "WaitingList",
+    "name": "Client In The Queue",
     "slug": "WaitingList",
+    "privacy": "public",
+    "description": "Informs the client in real time where they are in the listing to be served.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

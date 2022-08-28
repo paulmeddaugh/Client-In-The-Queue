@@ -1,13 +1,14 @@
 import react, {useState} from "react";
-import { StyleSheet, Text, Button, View, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, Button, View, TextInput, Image, TouchableOpacity, Alert, Platform } from 'react-native';
 import HelpIcon from 'react-native-vector-icons/AntDesign';
 import { app, analytics, auth, signInWithEmailAndPassword } from '../Firebase/firebase.js';
+import { database } from "../Firebase/firebase.js";
 
 const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
-    const [buttonText = 'Show Place In Line', setButtonText] = useState('');
+    const [buttonText, setButtonText] = useState('Show Place In Line');
 
     function helpNavigate () {
         navigation.navigate('Help');
@@ -23,22 +24,18 @@ const Login = ({ navigation }) => {
 
     const checkUser = () => {
 
-        setButtonText('Authenticating');
+        const valid = /^[\w.]+@\w+\.\w+$/.test(email);
 
-        const valid = /^[\w.]+@\w+\.\w+$/.test(email.value);
-
-        if (!valid) { // If not valid, sends alert
-            Alert.alert(
-                "Please Enter a Valid Email",
-                "",
-                [
-                    {
-                        text: "Ok",
-                        onPress: () => console.log("Ok Pressed"),
-                    }
-                ]
-            );
+        if (!valid) { // If not valid
+            alert("Please enter a valid email.", "", [{
+                    text: "Ok",
+                    onPress: () => console.log("Ok Pressed"),
+                }
+            ]);
+            return;
         }
+
+        setButtonText('Authenticating');
 
         let user = null, errorCode = '', errorMessage = '';
         signInWithEmailAndPassword(auth, email, code)
@@ -51,20 +48,34 @@ const Login = ({ navigation }) => {
                 errorCode = error.code;
                 errorMessage = error.message;
                 console.log(errorMessage);
+                const title = errorMessage.indexOf('auth/network-request-failed') ? 'Network Error' :
+                    "Client Not Found"; // 'auth/wrong-password' error
+                const message = errorMessage.indexOf('auth/network-request-failed') ? 
+                    "There appears to be no internet."
+                    : "We can't find an email that matches with your code, unfortunately. Please try again "
+                        + "or call us at 111-223-4455."
+                const mobileButtons = [
+                    {
+                        text: "Try Again",
+                        onPress: () => console.log("Try Again Pressed"),
+                    }
+                ];
 
-                Alert.alert(
-                    "Client Not Found",
-                    "We apologize! We can't find an email that matches with your code. Please try again, "
-                    + "or call us at 111-223-4455.",
-                    [
-                        {
-                            text: "Try Again",
-                            onPress: () => console.log("Try Again Pressed"),
-                        }
-                    ]
-                  );
+                alert(title, message, mobileButtons);
             });
     }
+
+    function alert(mobileTitle, message, mobileButtons) {
+        if (Platform.OS !== 'web') { // Alert for mobile
+            Alert.alert(
+                mobileTitle,
+                message,
+                mobileButtons
+            );
+        } else { // Alert for web
+            window.confirm(mobileTitle + "\n" + message);
+        }
+    } 
 
     return (
         <View style={styles.container}>
@@ -72,14 +83,13 @@ const Login = ({ navigation }) => {
             <View style={styles.inputs}>
                 <TextInput value={email} style={styles.textInput} placeholder="E-mail" onChangeText={updateEmail}/>
                 <View style={styles.codeInput}>
-                    <TextInput value={code} style={styles.textInput} placeholder="Code" onChangeText={updateCode}/>
+                    <TextInput value={code} style={styles.textInput} placeholder="Code or Password" onChangeText={updateCode}/>
                     <HelpIcon style={styles.icon} name="questioncircleo" size={20} onPress={helpNavigate}/>
                 </View>
             </View>
             <View style={styles.buttons}>
                 <Button
-                    title="Show Place In Line"
-                    value={buttonText}
+                    title={buttonText}
                     onPress={checkUser}
                 />
             </View>

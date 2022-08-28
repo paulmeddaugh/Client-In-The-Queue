@@ -1,0 +1,6 @@
+Firebase dashboard - https://console.firebase.google.com/project/waiting-list-7aede/overview
+Firebase Realtime database usage tutorial - https://www.youtube.com/watch?v=pP7quzFmWBY
+React Navigation docs - https://reactnavigation.org/docs/navigating
+React Native App Tutorial with firebase - https://www.youtube.com/watch?v=AvgrS-cCcXQ&t=195s
+Importing excel file to a database - https://www.dropbase.io/post/ways-to-convert-excel-files-to-databases-quickly
+Custom mobile alerts - https://www.youtube.com/watch?v=NsAQTbAV2zE
