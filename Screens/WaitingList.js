@@ -8,12 +8,12 @@ const WaitingList = ({ navigation }) => {
         navigation.popToTop();
     }
 
-    database()
-        .ref('/users/0')
-        .once('value')
-        .then(snapshot => {
-            console.log('User data: ', snapshot.val());
-        });
+    // database()
+    //     .ref('/users/0')
+    //     .once('value')
+    //     .then(snapshot => {
+    //         console.log('User data: ', snapshot.val());
+    //     });
 
     return (
         <View style={styles.container}>
