@@ -8,7 +8,7 @@ const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
-    const [buttonText, setButtonText] = useState('Show Place In Line');
+    const [buttonText, setButtonText] = useState('Show Place In Queue');
 
     function helpNavigate () {
         navigation.navigate('Help');
@@ -42,17 +42,19 @@ const Login = ({ navigation }) => {
             .then((userCredential) => {
                 user = userCredential.user;
 
+                setButtonText('Show Place In Queue');
                 navigation.navigate('Waiting List');
             })
             .catch((error) => {
                 errorCode = error.code;
                 errorMessage = error.message;
                 console.log(errorMessage);
-                const title = errorMessage.indexOf('auth/network-request-failed') ? 'Network Error' :
+                console.log(errorMessage.indexOf('auth/network-request-failed'));
+                const title = errorMessage.indexOf('auth/network-request-failed') != -1 ? 'Network Error' :
                     "Client Not Found"; // 'auth/wrong-password' error
-                const message = errorMessage.indexOf('auth/network-request-failed') ? 
+                const message = errorMessage.indexOf('auth/network-request-failed') != -1 ? 
                     "There appears to be no internet."
-                    : "We can't find an email that matches with your code, unfortunately. Please try again "
+                    : "We can't find an email that matches with your password unfortunately. Please try again "
                         + "or call us at 111-223-4455."
                 const mobileButtons = [
                     {
@@ -62,6 +64,7 @@ const Login = ({ navigation }) => {
                 ];
 
                 alert(title, message, mobileButtons);
+                setButtonText('Show Place In Queue');
             });
     }
 
