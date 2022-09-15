@@ -1,25 +1,58 @@
-import react from "react";
-import { StyleSheet, View, Text, Button } from 'react-native';
-import { database } from "../Firebase/firebase";
+import React, { useState } from "react";
+import { StyleSheet, View, Text, Button, Image } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { db, onValue, ref } from "../Firebase/firebase";
 
-const WaitingList = ({ navigation }) => {
+const WaitingList = ({ route, navigation }) => {
+
+    const UID = route.params;
+    const [numInQueue, setNumInQueue] = useState('');
+    const [time, setTime] = useState('');
 
     const loginNavigate = () => {
         navigation.popToTop();
     }
 
-    // database()
-    //     .ref('/users/0')
-    //     .once('value')
-    //     .then(snapshot => {
-    //         console.log('User data: ', snapshot.val());
-    //     });
+    useFocusEffect(
+        React.useCallback(() => { // Screen focused
+            
+            if (UID) {
+                const techIDRef = ref(db, "users/" + UID);
+                onValue(techIDRef, (snapshot) => { // listener that runs when attached and when value is changed
+                    const techID = snapshot.val();
+                    const techRef = ref(db, "technicians/" + techID);
+                    onValue(techRef, (snapshot) => {
+                        const techObj = snapshot.val();
+                        const queueNum = techObj.clientsInQueue.findIndex((val) => val == UID);
+                        if (queueNum != -1) {
+                            setNumInQueue(String(queueNum));
+                            const t = Number(techObj.aveTimePerClient) * Number(queueNum)
+                            setTime((t == 0) ? 'Very soon' : (t == 1) ? '1 day' : t + ' days');
+                        } else { // no client found in technician's queue
+
+                        }
+                    });
+                });
+            }
+
+            return () => { // Screen unfocused
+                
+            }
+        }, [])
+    );
 
     return (
         <View style={styles.container}>
+            <Image 
+                style={styles.logo} 
+                source={require("../assets/icons/3rd Gen Plumbing logo.png")}
+                blurRadius={5} 
+            />
             <View style={styles.info}>
-                <Text style={styles.place}>4th place in line</Text>
-                <Text style={styles.time}>Average time: 4 days</Text>
+                <Text style={styles.place}>
+                    <Text style={styles.number}>{numInQueue}</Text> 
+                    {numInQueue == 1 ? ' client' : ' clients'} ahead</Text>
+                <Text style={styles.time}>Estimated time: {time}</Text>
             </View>
             <View style={styles.diffCode}>
                 <Button 
@@ -45,6 +78,9 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
     },
+    number: {
+        fontSize: 45,
+    },
     time: {
         marginTop: 20,
         fontSize: 20,
@@ -57,7 +93,17 @@ const styles = StyleSheet.create({
         bottom: 0,
         display: 'flex',
         alignItems: 'center',
-    }
+    },
+    logo: {
+        flex: 1,
+        resizeMode: "contain",
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        alignContent: 'center',
+        opacity: 0.1,
+        zIndex: -1,
+    },
 });
   
 export default WaitingList;

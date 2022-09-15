@@ -1,7 +1,8 @@
 {
-  "name": "waitinglist",
-  "version": "1.0.0",
+  "name": "clientInTheQueue",
+  "version": "1.0.1",
   "main": "node_modules/expo/AppEntry.js",
+  "image" : "latest",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",

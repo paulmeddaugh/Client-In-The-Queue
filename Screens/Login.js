@@ -1,8 +1,8 @@
-import react, {useState} from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, Button, View, TextInput, Image, TouchableOpacity, Alert, Platform } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import HelpIcon from 'react-native-vector-icons/AntDesign';
 import { app, analytics, auth, signInWithEmailAndPassword } from '../Firebase/firebase.js';
-import { database } from "../Firebase/firebase.js";
 
 const Login = ({ navigation }) => {
 
@@ -22,12 +22,22 @@ const Login = ({ navigation }) => {
         setEmail(value);
     }
 
+    useFocusEffect(
+        React.useCallback(() => {
+            // Focused
+
+            return () => { // Unfocused
+                
+            }
+        }, [])
+    );
+
     const checkUser = () => {
 
-        const valid = /^[\w.]+@\w+\.\w+$/.test(email);
-
-        if (!valid) { // If not valid
-            alert("Please enter a valid email.", "", [{
+        // Checks if email is a valid email
+        if (!/^[\w.]+@\w+\.\w+$/.test(email)) {
+            alert("Please enter a valid email.", "", [
+                {
                     text: "Ok",
                     onPress: () => console.log("Ok Pressed"),
                 }
@@ -37,15 +47,16 @@ const Login = ({ navigation }) => {
 
         setButtonText('Authenticating');
 
+        // Checks user credentials with firebase
         let user = null, errorCode = '', errorMessage = '';
         signInWithEmailAndPassword(auth, email, code)
-            .then((userCredential) => {
+            .then((userCredential) => { // firebase has authorized user
                 user = userCredential.user;
 
                 setButtonText('Show Place In Queue');
-                navigation.navigate('Waiting List');
+                navigation.navigate('Waiting List', user.uid);
             })
-            .catch((error) => {
+            .catch((error) => { // error finding user
                 errorCode = error.code;
                 errorMessage = error.message;
                 console.log(errorMessage);
@@ -54,8 +65,8 @@ const Login = ({ navigation }) => {
                     "Client Not Found"; // 'auth/wrong-password' error
                 const message = errorMessage.indexOf('auth/network-request-failed') != -1 ? 
                     "There appears to be no internet."
-                    : "We can't find an email that matches with your password unfortunately. Please try again "
-                        + "or call us at 111-223-4455."
+                    : "We can't find an email that matches your password unfortunately. Please try again "
+                        + "or call us at (918) 933 3436."
                 const mobileButtons = [
                     {
                         text: "Try Again",
@@ -68,6 +79,7 @@ const Login = ({ navigation }) => {
             });
     }
 
+    // Utility function for showing alerts
     function alert(mobileTitle, message, mobileButtons) {
         if (Platform.OS !== 'web') { // Alert for mobile
             Alert.alert(
@@ -82,15 +94,23 @@ const Login = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Login</Text>
+            <View style={styles.logoContainer}>
+                <Image style={styles.logo} source={require("../assets/icons/3rd Gen Plumbing banner black.png")} />
+            </View>
             <View style={styles.inputs}>
-                <TextInput value={email} style={styles.textInput} placeholder="E-mail" onChangeText={updateEmail}/>
+                <TextInput 
+                    value={email} 
+                    style={styles.textInput} 
+                    placeholder="E-mail" 
+                    onChangeText={updateEmail}
+                    autoFocus={true}
+                />
                 <View style={styles.codeInput}>
-                    <TextInput value={code} style={styles.textInput} placeholder="Code or Password" onChangeText={updateCode}/>
-                    <HelpIcon style={styles.icon} name="questioncircleo" size={20} onPress={helpNavigate}/>
+                    <TextInput value={code} style={styles.textInput} placeholder="Order Code or Password" onChangeText={updateCode}/>
+                    <HelpIcon style={styles.helpIcon} name="questioncircleo" size={20} onPress={helpNavigate}/>
                 </View>
             </View>
-            <View style={styles.buttons}>
+            <View style={styles.buttonContainer}>
                 <Button
                     title={buttonText}
                     onPress={checkUser}
@@ -102,13 +122,27 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    logoContainer: {
+        position: 'absolute',
+        top: 35,
+    },
+    logo: {
+        width: 282,
+        height: 98,
     },
     header: {
         fontSize: 40,
         fontWeight: 'bold',
+        fontFamily: 'Franklin Gothic',
     },
     inputs: {
         marginTop: 25,
@@ -123,12 +157,13 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         position: 'relative',
+        fontFamily: 'Franklin Gothic',
     },
-    buttons: {
+    buttonContainer: {
         margin: 20,
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
-    icon: {
+    helpIcon: {
         position: 'absolute',
         left: '100%',
         padding: 8,

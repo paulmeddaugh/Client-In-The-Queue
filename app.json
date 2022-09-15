@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "Client In The Queue",
-    "slug": "WaitingList",
+    "slug": "ClientInTheQueue",
     "privacy": "public",
     "description": "Informs the client in real time where they are in the listing to be served.",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +28,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 1,
-      "package": "com.pm1776.WaitingList"
+      "package": "com.pm1776.WaitingList",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
