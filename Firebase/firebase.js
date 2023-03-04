@@ -3,7 +3,7 @@
 // import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue, set } from 'firebase/database';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,4 +32,4 @@ const db = getDatabase();
 // set() - writes to the database
 
 export { app, analytics, auth, 
-    db, ref, onValue, signInWithEmailAndPassword };
+    db, ref, onValue, set, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
