@@ -1,5 +1,5 @@
 {
-  "name": "clientInTheQueue",
+  "name": "clientinthequeue",
   "version": "1.0.1",
   "main": "node_modules/expo/AppEntry.js",
   "image": "latest",
@@ -28,7 +28,21 @@
     "react-native-web": "~0.18.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
-  "private": true
+  "private": true,
+  "description": "A mobile and web app that displays the estimated wait time and number of customers ahead of a client to be serviced by 3rd Gen Plumbing.</br>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulmeddaugh/Waiting-List.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paulmeddaugh/Waiting-List/issues"
+  },
+  "homepage": "https://github.com/paulmeddaugh/Waiting-List#readme"
 }
