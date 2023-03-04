@@ -1,22 +1,25 @@
 import { db, set, onValue, auth, createUserWithEmailAndPassword, ref } from "./firebase.js";
 
 window.addEventListener("load", () => {
-    const techsSelect = document.getElementById('techs');
-    const techsRef = ref(db, 'technicians');
-    let techs;
-    onValue(techsRef, snapShot => {
-        techs = snapShot.val(); // Array
 
-        for (let i = 0; i < techs.length; i++) {
+    // Loads technician options
+    const techsSelect = document.getElementById('techs');
+    let techs;
+
+    const techsRef = ref(db, 'technicians');
+    onValue(techsRef, snapShot => {
+        
+        // Creates an option for each tech
+        techs = snapShot.val();
+        for (let optionIn = 0; optionIn < techs.length; optionIn++) {
             const techOp = document.createElement('option');
-            techOp.value = techOp.innerHTML = techs[i].name;
-            techOp.id = i;
+            techOp.value = techOp.innerHTML = techs[techOp.id = optionIn].name;
             techsSelect.appendChild(techOp);
         }
     })
 
-    const add = document.getElementById('add');
-    add.addEventListener("click", () => {
+    // Validates email and password
+    document.getElementById('add').addEventListener("click", () => {
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         let error = '', errorObj = null;
@@ -35,6 +38,7 @@ window.addEventListener("load", () => {
             errorObj.focus();
         }
 
+        // Creates user and inserts data in firebase realtime db
         createUserWithEmailAndPassword(auth, email.value, password.value).then(userCreds => {
 
             const techID = techsSelect.options[techsSelect.selectedIndex].id;
@@ -45,7 +49,7 @@ window.addEventListener("load", () => {
 
             // Adds user in user list
             const userRef = ref(db, 'users/' + userCreds.user.uid);
-            set(userRef, techID);
+            set(userRef, Number(techID));
         });
     });
 });
