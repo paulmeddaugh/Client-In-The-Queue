@@ -37,15 +37,15 @@ window.addEventListener("load", () => {
 
         createUserWithEmailAndPassword(auth, email.value, password.value).then(userCreds => {
 
-            const techID = techsSelect.options[techsSelect.selectedIndex].value;
+            const techID = techsSelect.options[techsSelect.selectedIndex].id;
 
             // Inserts user in techs clientInQueue
-            const techRef = ref(db, 'technicians/' + techID + '/clientsInQueue');
-            set(techRef, { [techs.length]: userCreds.user.uid });
+            const techRef = ref(db, 'technicians/' + techID + '/clientsInQueue/' + techs.length);
+            set(techRef, userCreds.user.uid);
 
             // Adds user in user list
-            const userRef = ref(db, 'users');
-            set(userRef, { [userCreds.user.uid]: techID })
+            const userRef = ref(db, 'users/' + userCreds.user.uid);
+            set(userRef, techID)
         });
     });
 });
