@@ -1,4 +1,4 @@
-import { db, set, onValue, auth, createUserWithEmailAndPassword, ref } from "./firebase";
+import { db, set, onValue, auth, createUserWithEmailAndPassword, ref } from "./firebase.js";
 
 window.addEventListener("load", () => {
     const techsSelect = document.getElementById('techs');

@@ -31,5 +31,5 @@ const db = getDatabase();
     // accessed as (snapshot) => snapshot.val()
 // set() - writes to the database
 
-export { app, analytics, auth, 
-    db, ref, onValue, set, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
+export { app, analytics, auth, db, 
+    ref, onValue, set, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
