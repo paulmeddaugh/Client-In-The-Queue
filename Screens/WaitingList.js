@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, Image } from 'react-native';
+import { StyleSheet, View, Text, Button, Image, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { db, onValue, ref } from "../Firebase/firebase";
 
 const WaitingList = ({ route, navigation }) => {
 
     const UID = route.params;
-    const [numInQueue, setNumInQueue] = useState('');
-    const [time, setTime] = useState('');
+    const [numInQueue, setNumInQueue] = useState(0);
+    const [time, setTime] = useState(0);
 
     const loginNavigate = () => {
-        navigation.popToTop();
+        navigation.navigate('Login');
     }
 
-    useFocusEffect(
-        React.useCallback(() => { // Screen focused
-            
+    React.useEffect(() => { // unmemoized, called when tab is focused
+        const unsubscribe = navigation.addListener('focus', () => {
             if (UID) {
                 const techIDRef = ref(db, "users/" + UID);
                 onValue(techIDRef, (snapshot) => { // listener that runs when attached and when value is changed
@@ -34,19 +33,44 @@ const WaitingList = ({ route, navigation }) => {
                     });
                 });
             }
+        });
+    
+        return unsubscribe;
+      }, [navigation, UID]);
 
-            return () => { // Screen unfocused
+    // useFocusEffect(
+    //     React.useCallback(() => { // Screen focused, memoized results (should change)
+    //         if (UID) {
+    //             const techIDRef = ref(db, "users/" + UID);
+    //             onValue(techIDRef, (snapshot) => { // listener that runs when attached and when value is changed
+    //                 const techID = snapshot.val();
+    //                 const techRef = ref(db, "technicians/" + techID);
+    //                 onValue(techRef, (snapshot) => {
+    //                     const techObj = snapshot.val();
+    //                     const queueNum = techObj.clientsInQueue.findIndex((val) => val == UID);
+    //                     if (queueNum != -1) {
+    //                         setNumInQueue(String(queueNum));
+    //                         const t = Number(techObj.aveTimePerClient) * Number(queueNum)
+    //                         setTime((t == 0) ? 'Very soon' : (t == 1) ? '1 day' : t + ' days');
+    //                     } else { // no client found in technician's queue
+
+    //                     }
+    //                 });
+    //             });
+    //         }
+
+    //         return () => { // Screen unfocused
                 
-            }
-        }, [])
-    );
+    //         }
+    //     }, [UID])
+    // );
 
     return (
         <View style={styles.container}>
             <Image 
                 style={styles.logo} 
                 source={require("../assets/icons/3rd Gen Plumbing logo.png")}
-                blurRadius={5} 
+                blurRadius={Platform.OS == 'web' ? 4.5 : 8} 
             />
             <View style={styles.info}>
                 <Text style={styles.place}>
@@ -54,8 +78,11 @@ const WaitingList = ({ route, navigation }) => {
                     {numInQueue == 1 ? ' client' : ' clients'} ahead</Text>
                 <Text style={styles.time}>Estimated time: {time}</Text>
             </View>
-            <View style={styles.diffCode}>
+            <View style={styles.diffCodeContainer}>
                 <Button 
+                    style={styles.diffCode}
+                    underlayColor='#F25822'
+                    color="#F25822"
                     title="Enter As Different User"
                     onPress={loginNavigate}
                 />
@@ -85,7 +112,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 20,
     },
-    diffCode: {
+    diffCodeContainer: {
         position: 'absolute',
         top: '90%',
         left: 0,
@@ -93,6 +120,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         display: 'flex',
         alignItems: 'center',
+    },
+    diffCode: {
+        backgroundColor: '#F25822',
+        borderColor: '#F25822',
     },
     logo: {
         flex: 1,

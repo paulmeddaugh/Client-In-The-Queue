@@ -4,14 +4,14 @@
     "slug": "ClientInTheQueue",
     "privacy": "public",
     "description": "Informs the client in real time where they are in the listing to be served.",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#23245c"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,7 +20,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pm1776.WaitingList"
     },
     "android": {
       "adaptiveIcon": {

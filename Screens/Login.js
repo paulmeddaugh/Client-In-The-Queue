@@ -95,7 +95,7 @@ const Login = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
-                <Image style={styles.logo} source={require("../assets/icons/3rd Gen Plumbing banner black.png")} />
+                <Image style={styles.logo} source={require("../assets/icons/3rd Gen Plumbing banner noBorder.png")} />
             </View>
             <View style={styles.inputs}>
                 <TextInput 
@@ -107,11 +107,19 @@ const Login = ({ navigation }) => {
                 />
                 <View style={styles.codeInput}>
                     <TextInput value={code} style={styles.textInput} placeholder="Order Code or Password" onChangeText={updateCode}/>
-                    <HelpIcon style={styles.helpIcon} name="questioncircleo" size={20} onPress={helpNavigate}/>
+                    <TouchableOpacity style={styles.helpIconContainer} onPress={helpNavigate}>
+                        <Image 
+                            style={styles.helpIcon} 
+                            source={require("../assets/icons/helpIcon2.png")}
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
                 <Button
+                    underlayColor='#F25822'
+                    color="#F25822"
+                    style={styles.button}
                     title={buttonText}
                     onPress={checkUser}
                 />
@@ -130,6 +138,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: '#23245c',
     },
     logoContainer: {
         position: 'absolute',
@@ -137,7 +146,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: 282,
-        height: 98,
+        height: 115,
     },
     header: {
         fontSize: 40,
@@ -158,15 +167,24 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         position: 'relative',
         fontFamily: 'Franklin Gothic',
+        borderRadius: 5,
     },
     buttonContainer: {
-        margin: 20,
+        marginTop: 30,
         flexDirection: 'row',
     },
-    helpIcon: {
+    button: {
+        backgroundColor: '#F25822',
+        borderColor: '#F25822',
+    },
+    helpIconContainer: {
         position: 'absolute',
         left: '100%',
-        padding: 8,
+        margin: 10,
+    },
+    helpIcon: {
+        width: 20,
+        height: 20,
     },
 });
 
