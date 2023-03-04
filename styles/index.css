@@ -10,7 +10,7 @@ body {
     align-items: center; 
     flex-direction: column;
     background-image: url(../assets/icons/3rd\ Gen\ Plumbing\ logo.png);
-    background-position: calc(center + 5px) center;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: auto 65%;
 }
