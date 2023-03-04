@@ -3,7 +3,7 @@ import { StyleSheet, Text, Button, View, TextInput, Image, TouchableOpacity, Ale
     KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import HelpIcon from 'react-native-vector-icons/AntDesign';
-import { app, analytics, auth, signInWithEmailAndPassword } from '../../Firebase/firebase.js';
+import { app, analytics, auth, signInWithEmailAndPassword } from '../firebase.js';
 import { alert } from "../utility.js";
 
 const Login = ({ navigation }) => {

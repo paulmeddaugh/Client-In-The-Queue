@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, Image, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { db, onValue, ref, set, auth } from "../../Firebase/firebase";
+import { db, onValue, ref, set, auth } from "../firebase";
 import { alert } from "../utility";
 
 const WaitingList = ({ route, navigation }) => {
