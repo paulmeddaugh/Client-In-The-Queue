@@ -50,6 +50,8 @@ window.addEventListener("load", () => {
             // Adds user in user list
             const userRef = ref(db, 'users/' + userCreds.user.uid);
             set(userRef, Number(techID));
+
+            alert('Client added!');
         });
     });
 });
