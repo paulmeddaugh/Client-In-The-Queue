@@ -39,6 +39,11 @@
       "sourceExts": [
         "cjs"
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5de8a67d-1700-4ad6-bd82-0e2a25d8a966"
+      }
     }
   }
 }

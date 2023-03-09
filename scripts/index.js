@@ -248,9 +248,11 @@ window.addEventListener("load", () => {
                 set(ref(db, `users/${currentuid}/${newJob.active ? 'activeJobs' : 'inactiveJobs'}/${len}`), jobID);
 
                 // Stores jobID in tech queue
-                const queueLen = techs[newJob.techID].jobsInQueue?.length ?? 0;
+                const queueLen = techs[newJob.techID]?.jobsInQueue?.length ?? 0;
                 set(ref(db, `technicians/${newJob.techID}/jobsInQueue/${queueLen}`), jobID);
-                alert('Job created!');
+
+                alert(`Job created! Placed as the ${queueLen} in queue with an estimated time to be`
+                    + `service of ${techs[newJob.techID].aveTimePerClient * queueLen}.`);
             });
 
         // Updates a job
@@ -265,17 +267,48 @@ window.addEventListener("load", () => {
                 return;
             }
 
+            const prevJob = jobs[currentJobId];
             let updatedJob = getEditorJobObj();
-            if (JSON.stringify(updatedJob) === JSON.stringify(jobs[currentJobId])) {
+
+            if (JSON.stringify(updatedJob) === JSON.stringify(prevJob)) {
                 alert('The job appears to not have been edited.');
                 return;
             }
 
-            set(ref(db, `jobs/${currentJobId}`), updatedJob);
+            set(ref(db, `jobs/${currentJobId}`), updatedJob); // Updates on firebase
 
-            if (updatedJob.active !== jobs[currentJobId]) { // Switches user array
-                // set(ref(db, `users/${updatedJob.uid}/${jobs[currentJobId] ? 'activeJobs' : 'inactiveJobs'}`
-                //     + `/${updatedJob}`))
+            // Switches jobID to proper active or inactive user array if 'active' changed
+            if (updatedJob.active !== prevJob.active) {
+                const prevJobArr = getCurrentUserJobArray(prevJob.active);
+                const prevJobIndex = prevJobArr?.findIndex(jobId => jobId === currentJobId);
+                
+                if ([undefined, -1].includes(prevJobIndex)) {
+                    alert('Error: No previous job of user found to update.');
+                } else {
+                    // Removes old job reference in user object
+                    set(ref(db, `users/${updatedJob.uid}/${prevJob.active ? 'activeJobs' : 'inactiveJobs'}`
+                        + `/${prevJobIndex}`), null);
+                }
+
+                // Adds to end of correct array in user object
+                set(ref(db, `users/${updatedJob.uid}/${updatedJob.active ? 'activeJobs' : 'inactiveJobs'}`
+                    + `/${getCurrentUserJobArray(updatedJob.active)?.length ?? 0}`), currentJobId);
+            }
+
+            if (prevJob.techID !== updatedJob.techID) {
+                // Removes jobID in current tech queue
+                const index = techs[techID]?.jobsInQueue?.findIndex(jobID => jobID === prevJob.techID);
+                
+                if (index === -1) {
+                    alert("Error: Job not found in previous technician's queue.")
+                } else {
+                    // Removes old job reference in technician object
+                    set(ref(db, `technicians/${prevJob.techID}/jobsInQueue/${index}`), null);
+                }
+
+                // Adds to end of correct technician queue
+                const queueLen = techs[updatedJob.techID]?.jobsInQueue?.length ?? 0;
+                set(ref(db, `technicians/${updatedJob.techID}/jobsInQueue/${queueLen}`), currentJobId);
             }
 
             alert('Job updated!');
@@ -288,6 +321,25 @@ window.addEventListener("load", () => {
     });
 });
 
+/**
+ * Returns a reference to the correct job array in the current user object identified by currentuid
+ * (active = true would return activeJobs array, and active = false returns inactiveJobs array).
+ * 
+ * @param {boolean} isActive The status of the job to get the proper current user job array.
+ * @returns A reference to the array.
+ */
+const getCurrentUserJobArray = (isActive) => {
+    return (isActive) ? 
+          users[currentuid]?.activeJobs 
+        : users[currentuid]?.inactiveJobs;
+}
+
+/**
+ * Determines the tech ID of selected option of 'techs' <select>. If 'Auto' is selected, determines
+ * the tech with the lowest amount of estimated time to complete the jobs in their queue.
+ * 
+ * @returns The tech ID of the selected option.
+ */
 const getTech = () => {
     const techsSelect = _('techs');
     let lowestTime = Number.MAX_VALUE, lowestID = 0;
@@ -366,7 +418,6 @@ function selectUser(uid) {
     if (currentTab.id === 'update') { 
 
         const allJobs = (users[currentuid].activeJobs?.length) ? users[currentuid].activeJobs : [];
-        console.log(users[currentuid]);
         if (users[currentuid].inactiveJobs?.length) allJobs.concat(users[currentuid].inactiveJobs);
 
         const jobsSelect = _('jobs');

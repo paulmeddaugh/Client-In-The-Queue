@@ -146,8 +146,12 @@ label {
     border-bottom: 1px solid grey;
 }
 
+.tableData {
+    border-right: 1px solid grey;
+}
+
 .tableData:hover {
-    background-color: #d0d0d086;
+    background-color: #f6f6f686;
 }
 
 .d-none {
