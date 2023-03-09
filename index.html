@@ -1,36 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Database UI"
-    />
-    <link rel="stylesheet" href="./styles/index.css">
-    <script type="module" src="./pages_dist/main.js"></script>
-    <title>3rd Gen Plumbing Database</title>
-  </head>
-  <body>
-    <div class="container">
-        <h2 class="header">Client In The Queue Database</h2>
-        <h4>Create User</h4>
-        <div>
-            <label for="email">E-mail:</label>
-            <input id="email" name="email" size="30" />
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" size="30" />
-        </div>
-        <div>
-            <span>Technician:</span>
-            <select id="techs"></select>
-        </div>
-        <br />
-        <button type="button" id="add">Add To Tech's Queue</button>
-    </div>
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Database UI" />
+		<link rel="stylesheet" href="./styles/index.css">
+		<script type="module" src="./pages_dist/main.js"></script>
+		<title>3rd Gen Plumbing Database</title>
+	</head>
+	<body>
+		<div class="container">
+			<h2 class="header">Client In The Queue Database</h2>
+			<div id="tabsContainer">
+				<nav id="tabs">
+					<a id="create" class="tab active">Create Job</a>
+					<a id="update" class="tab">Update Job</a>
+					<a id="view" class="tab no-border">View All Jobs</a>
+				</nav>
+
+				<div id="editor" class="p-relative">
+					<div class="d-flex m-2-lr p-relative">
+						<label for="email">E-mail:</label>
+						<input id="email" name="email" class="flex-1" list="emails" />
+						<i id="user-icon" class="d-none"></i>
+
+						<datalist id="emails"></datalist>
+					</div>
+					<div class="d-flex m-2-lr">
+						<label for="name">Name:</label>
+						<input id="name" name="name" class="flex-1" />
+					</div>
+					<div id="passwordContainer" class="d-flex m-2-lr">
+						<label for="password">Password:</label>
+						<input type="password" id="password" name="password" class="flex-1" />
+					</div>
+					<br />
+					<button type="button" id="user-status" class="button-unclickable">
+						Creating a new client account.
+					</button>
+
+					<div id="jobsContainer" class="d-none">
+						<label>Job:</label>
+						<select id="jobs" class="flex-1">
+							<option value="default">Select a client to select a job</option>
+						</select>
+					</div>
+					<div class="m-b-3">
+						<label>Service Type:</label>
+						<select id="serviceType">
+							<option value="Plumbing Maintenance and Repair">Plumbing Maintenance and Repair</option>
+							<option value="Sewer & Drain Cleaning and Repair">Sewer & Drain Cleaning and Repair</option>
+							<option value="Water Heater">Water Heater</option>
+							<option value="Water Meter Installation">Water Meter Installation</option>
+							<option value="Kitchen And Bathroom Remodeling">Kitchen And Bathroom Remodeling</option>
+							<option value="Water Filtration Services">Water Filtration Services</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+					<div>
+						<textarea id="serviceDescrip" rows="4" placeholder="Description"></textarea>
+					</div>
+					
+					<div class="d-flex justifyContent-sb">
+						<div>
+							<span>Technician:</span>
+							<select id="techs">
+								<option value="Auto">Auto</option>
+							</select>
+						</div>			
+
+						<div id="activeContainer" class="p-relative d-none">
+							<input type="checkbox" id="active" />
+							<label for="active">Active</label>
+						</div>
+						
+					</div>
+					<br />
+					<button type="button" id="submit">Create</button>
+				</div>
+
+				<table id="viewTable" class="d-none"></table>
+			</div>
+		</div>
+	</body>
 </html>

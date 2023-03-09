@@ -3,8 +3,9 @@
 // import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, onValue, set } from 'firebase/database';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged,
+    updateEmail } from "firebase/auth";
+import { getDatabase, ref, onValue, set, push, update } from 'firebase/database';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,4 +33,5 @@ const db = getDatabase();
 // set() - writes to the database
 
 export { app, analytics, auth, db, 
-    ref, onValue, set, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
+    ref, onValue, set, push, update, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+    onAuthStateChanged, updateEmail };

@@ -14,6 +14,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: auto 65%;
+    font-family: Corbel Light;
 }
 
 .container {
@@ -25,4 +26,158 @@ body {
 
 .header {
     margin-top: 8px;
+}
+
+#tabsContainer {
+    border: 1px solid;
+    border-radius: 2px;
+}
+
+#tabs {
+    display: flex;
+    margin-bottom: 6px;
+    border-bottom: 1px solid gray;
+    box-shadow: 0 0px 2px 0 grey;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid grey;
+    cursor: pointer;
+    background-color: #d3d3d3d6;
+    padding: 3px 0 2px 0;
+    font-style: italic;
+}
+
+.active {
+    background-color: #ffa50087;
+}
+
+.no-border {
+    border: unset;
+}
+
+#editor {
+    padding: 8px;
+}
+
+label {
+    margin-right: 2px;
+}
+
+#user-icon {
+    background-position: center;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    position: absolute;
+    left: 100%;
+    translate: -100%;
+}
+
+.loading-icon {
+    background-image: url(../assets/icons/loading-gif.gif);
+}
+
+.green-check-icon {
+    background-image: url(../assets/icons/green-check-mark.gif);
+}
+
+.new-account-icon {
+    background-image: url(../assets/icons/new-account.gif);
+}
+
+.x-icon-anim {
+    background-image: url(../assets/icons/x.gif);
+}
+
+#name, #email, #password, #jobs {
+    background-color: #ffffffc4;
+    border: none;
+    border-bottom: 1px solid;
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+}
+
+#name:focus-visible, #email:focus-visible, #password:focus-visible, #jobs:focus-visible {
+    outline: 1px solid;
+}
+
+#user-status {
+    color: salmon;
+    text-align: end;
+    margin-bottom: 18px;
+    position: relative;
+    left: 100%;
+    translate: -100%;
+    transition: .5s ease;
+}
+
+#selected {
+    margin-top: 3px;
+}
+
+.button-unclickable {
+    border: none;
+    background-color: unset;
+    /* pointer-events: none; */
+}
+
+#jobsContainer {
+    margin-bottom: 4px;
+}
+
+#jobs {
+    max-width: 300px;
+}
+
+#serviceDescrip {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#jobs, #serviceDescrip, #techs {
+    background-color: #ffffffc4;
+}
+
+.tableHeader {
+    border-bottom: 1px solid grey;
+}
+
+.tableData:hover {
+    background-color: #d0d0d086;
+}
+
+.d-none {
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.justifyContent-sb {
+    justify-content: space-between;
+}
+
+.m-2-lr {
+    margin: 2px 0;
+}
+
+.m-b-3 {
+    margin-bottom: 3px;
+}
+
+.p-relative {
+    position: relative;
 }
